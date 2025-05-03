@@ -1,0 +1,10 @@
+
+services:
+  archive-api:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    container_name: don-music-api
+
