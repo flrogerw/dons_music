@@ -57,11 +57,15 @@ Flask==3.1.0
 flask-restx==1.3.0
 importlib_metadata==8.7.0
 importlib_resources==6.5.2
+iniconfig==2.1.0
 itsdangerous==2.2.0
 Jinja2==3.1.6
 jsonschema==4.23.0
 jsonschema-specifications==2025.4.1
 MarkupSafe==3.0.2
+packaging==25.0
+pluggy==1.5.0
+pytest==8.3.5
 pytz==2025.2
 referencing==0.36.2
 rpds-py==0.24.0
@@ -104,7 +108,15 @@ Add a new media. Requires:
 }
 ```
 
-Formats allowed: `CD`, `Vinyl`
+### `DELETE /media/<media_id>`
+Deletes a media item from Don’s archive by its unique ID.
+```json
+{
+  "message": "Media {media_id} deleted successfully"
+}
+```
+
+
 
 ### `GET /media/search?query=Floyd`
 Search for media where the title, artist, location, or format match the given keyword.
