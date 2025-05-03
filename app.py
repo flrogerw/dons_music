@@ -45,7 +45,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from flask_restx import Api, Resource, fields
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -72,7 +72,6 @@ def init_db() -> None:
     The function safely closes the database connection after setup.
 
     """
-    print(DATABASE)
     if not Path.exists(Path(DATABASE)):
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
@@ -112,7 +111,17 @@ delete_model = api.model('Delete', {
 })
 
 @app.route('/custom-docs')
-def custom_ui():
+def custom_ui() -> str:
+    """Serve the custom Swagger UI documentation page.
+
+    This route overrides the default Flask-RESTX Swagger UI and renders a
+    custom `swagger-ui.html` template that can include branding, layout adjustments,
+    or additional customization such as logos and headers.
+
+    Returns:
+        str: Rendered HTML of the custom Swagger UI page.
+
+    """
     return render_template("swagger-ui.html")
 
 
@@ -125,7 +134,6 @@ class MediaList(Resource):
         post(): Accepts media data and adds a new record to the database.
 
     """
-
 
     @ns.doc(
         description="List all of Don's media.",

@@ -1,6 +1,8 @@
+
 import pytest
-import sqlite3
-from app import app, init_db, DATABASE
+
+from app import app, init_db
+
 
 @pytest.fixture
 def client():
@@ -21,7 +23,7 @@ def test_post_and_search_media(client):
         "title": "Test Album",
         "artist": "Test Artist",
         "location": "Shelf A",
-        "format": "CD"
+        "format": "CD",
     }
     post_resp = client.post('/media/', json=payload)
     assert post_resp.status_code == 201
@@ -40,7 +42,7 @@ def test_delete_media(client):
         "title": "To Delete",
         "artist": "Gone Soon",
         "location": "Box X",
-        "format": "Vinyl"
+        "format": "Vinyl",
     })
     media_id = response.get_json()['id']
 
