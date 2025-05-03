@@ -45,15 +45,15 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_restx import Api, Resource, fields
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
 api = Api(app, title="Don's Media Archive API", version='1.1',
           description="Store and search media metadata from Don's collection")
 ns = api.namespace('media', description='Media Operations')
 
-DATABASE = '/app/data/media.db'
+DATABASE = 'data/media.db'
 
 
 def init_db() -> None:
@@ -72,6 +72,7 @@ def init_db() -> None:
     The function safely closes the database connection after setup.
 
     """
+    print(DATABASE)
     if not Path.exists(Path(DATABASE)):
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
@@ -110,6 +111,10 @@ delete_model = api.model('Delete', {
     'message': fields.String,
 })
 
+@app.route('/custom-docs')
+def custom_ui():
+    return render_template("swagger-ui.html")
+
 
 @ns.route('/')
 class MediaList(Resource):
@@ -120,6 +125,7 @@ class MediaList(Resource):
         post(): Accepts media data and adds a new record to the database.
 
     """
+
 
     @ns.doc(
         description="List all of Don's media.",
@@ -325,7 +331,7 @@ class MediaSearch(Resource):
         },
     )
     def get(self) -> tuple[list[dict], int] | tuple[dict, int]:
-        """Search the Don's media archive using a case-insensitive partial match across the title, artist, location, and format fields.
+        """Search Don's media archive using a case-insensitive partial match across the title, artist, location, and format fields.
 
         Query Parameters:
             - query (str): The search term.

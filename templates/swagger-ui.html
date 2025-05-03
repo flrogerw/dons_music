@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Don’s Music Archive API</title>
+    <link href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" rel="stylesheet">
+    <style>
+        body {
+          margin: 20px;
+          background-color: #f2f3f5;
+        }
+      .custom-header {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* centers horizontally */
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .swagger-header-img {
+
+    }
+
+    .swagger-title {
+      margin: 0;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+        div.info {
+          display: none; /* hides the default Swagger header */
+        }
+    </style>
+</head>
+<body>
+<div class="custom-header">
+  <img src="/static/logo.webp" alt="Don's Archive" class="swagger-header-img" />
+  <h1 class="swagger-title">Don’s Music Archive API</h1>
+</div>
+<div id="swagger-ui"></div>
+
+<script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+<script>
+    const ui = SwaggerUIBundle({
+      url: "/swagger.json",
+      dom_id: "#swagger-ui"
+    });
+</script>
+</body>
+
+</html>

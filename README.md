@@ -108,6 +108,38 @@ Formats allowed: `CD`, `Vinyl`
 
 ### `GET /media/search?query=Floyd`
 Search for media where the title, artist, location, or format match the given keyword.
+```json
+[
+  {
+    "id": 45,
+    "title": "The Dark Side of the Moon",
+    "artist": "Pink Floyd",
+    "location": "Shelf Prog Rock",
+    "format": "CD"
+  },
+  {
+    "id": 89,
+    "title": "The Wall",
+    "artist": "Pink Floyd",
+    "location": "Shelf Alternative Rock",
+    "format": "CD"
+  },
+  {
+    "id": 213,
+    "title": "Wish You Were Here",
+    "artist": "Pink Floyd",
+    "location": "Shelf Classic Rock",
+    "format": "CD"
+  },
+  {
+    "id": 349,
+    "title": "The Piper at the Gates of Dawn",
+    "artist": "Pink Floyd",
+    "location": "Shelf Psychedelic Rock",
+    "format": "CD"
+  }
+]
+```
 
 ---
 
@@ -116,7 +148,7 @@ Search for media where the title, artist, location, or format match the given ke
 Swagger UI is automatically generated at:
 
 ```
-http://localhost:3000/
+http://localhost:3000/custom-docs
 ```
 
 You can test requests, view schemas, and see response codes here.
@@ -131,7 +163,7 @@ You can test requests, view schemas, and see response codes here.
 docker compose up --build
 ```
 
-Then open: [http://localhost:3000](http://localhost:5000)
+Then open: [http://localhost:3000/custom-docs](http://localhost:3000/custom-docs)
 
 > All media data will be persisted in the `data/` folder.
 
@@ -154,10 +186,22 @@ Then open: [http://localhost:3000](http://localhost:5000)
 ## Example cURL
 
 ```bash
-curl -X POST http://localhost:5000/media/ \
+curl -X POST http://localhost:3000/media/ \
   -H "Content-Type: application/json" \
   -d '{"title":"OK Computer", "artist":"Radiohead", "location":"Shelf B2", "format":"CD"}'
 ```
+
+---
+
+## Testing
+
+The API includes a suite of integration tests using `pytest` and Flask’s built-in test client. Tests cover core functionality including media listing, creation, deletion, and search.
+
+### Run Tests
+
+```bash
+pytest test_app.py
+````
 
 ---
 
@@ -166,6 +210,7 @@ curl -X POST http://localhost:5000/media/ \
 ```
 don-archive/
 ├── app.py                # Flask application
+├── test_app.py           # Flask application tests
 ├── requirements.txt      # Python dependencies
 ├── Dockerfile            # Docker image
 ├── docker-compose.yml    # Service and volume config
