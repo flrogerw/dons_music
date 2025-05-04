@@ -6,7 +6,7 @@ A simple RESTful API to help Don catalog and search his enormous collection of C
 
 ## Problem Statement
 
-Don is passionate about physical media and owns thousands of media in various formats: CDs, vinyl records. However, locating a specific media is a challenge due to the sheer size of his collection. For his birthday, you’re building him a personal archive system that:
+Don is passionate about physical media and owns thousands of media in various formats: CDs, vinyl records and tapes. However, locating a specific media is a challenge due to the sheer size of his collection. For his birthday, you’re building him a personal archive system that:
 
 - Stores media metadata (title, artist, location, format)
 - Provides an easy-to-use API to add and search media
