@@ -6,7 +6,7 @@ A simple RESTful API to help Don catalog and search his enormous collection of C
 
 ## Problem Statement
 
-Don is passionate about physical media and owns thousands of media in various formats: CDs, vinyl records, and cassettes. However, locating a specific media is a challenge due to the sheer size of his collection. For his birthday, you’re building him a personal archive system that:
+Don is passionate about physical media and owns thousands of media in various formats: CDs, vinyl records. However, locating a specific media is a challenge due to the sheer size of his collection. For his birthday, you’re building him a personal archive system that:
 
 - Stores media metadata (title, artist, location, format)
 - Provides an easy-to-use API to add and search media
@@ -32,6 +32,7 @@ This approach allows Don to call REST endpoints, search his collection, and even
 * Since it is only for my 'besty' Don, the only input 'cleansing' is done with the defined schema.  In the real world the input should be sanitized. 
 * Since this is only for Don, Most non-critical errors I dump to the screen.  In a real world I would log them and return a generic error to the client.
 * The search query is a very basic LIKE query against all the columns, but without a UI it could get messy.
+* **The 'Clarification' section used the term 'Album' as I interpreted as ALL formats for this demo. To true collectors an album is only vinyl.**
 ---
 
 ## Sample Data
