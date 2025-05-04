@@ -23,7 +23,9 @@ Endpoints:
 
 Models:
     - media_model: Defines required media fields and format validation.
-    - error_model: Standard error response format.
+    - error_request_model: Standard bad request error response format.
+    - error_internal_model: Standard internal server error.
+    - error_404_model: Standard not found error.
     - post_model: Minimal response model for POST success.
     - delete_model: Minimal response model for DELETE success.
 
@@ -51,9 +53,66 @@ from flask_restx import Api, Resource, fields
 app = Flask(__name__, template_folder="templates", static_folder="static")
 api = Api(app, title="Don's Media Archive API", version='1.1',
           description="Store and search media metadata from Don's collection")
-ns = api.namespace('media', description='Media Operations')
+ns = api.namespace('media', description='Media End Points')
 
 DATABASE = 'data/media.db'
+VALID_FORMATS = ['CD', 'Vinyl']
+
+media_model = api.model('Media', {
+    'title': fields.String(required=True, description="Media title"),
+    'artist': fields.String(required=True, description="Artist name"),
+    'location': fields.String(required=True, description="Storage location"),
+    'format': fields.String(required=True, enum=VALID_FORMATS, description="Media format"),
+})
+
+error_internal_model = api.model('Internal_Error', {
+    'error': fields.String(
+        description="Operation result message",
+        example="An unexpected error occurred",
+    ),
+    'code': fields.Integer(
+        description="Operation result message",
+        example=500,
+    ),
+})
+
+error_404_model = api.model('Not_Found_Error', {
+    'error': fields.String(
+        description="Operation result message",
+        example="Media not found",
+    ),
+    'code': fields.Integer(
+        description="Operation result message",
+        example=404,
+    ),
+})
+
+error_request_model = api.model('Request_Error', {
+    'error': fields.String(
+        description="Operation result message",
+        example="Bad Request - Invalid input structure",
+    ),
+    'code': fields.Integer(
+        description="Operation result message",
+        example=400,
+    ),
+})
+
+post_model = api.model('Post', {
+    'id': fields.Integer(
+        required=True,
+        description="Operation result message",
+        example=1234,
+    ),
+})
+
+delete_model = api.model('Delete', {
+    'message': fields.String(
+        required=True,
+        description="Operation result message",
+        example="Media {media_id} deleted successfully",
+    ),
+})
 
 
 def init_db() -> None:
@@ -88,28 +147,6 @@ def init_db() -> None:
         conn.close()
 
 
-VALID_FORMATS = ['CD', 'Vinyl']
-
-media_model = api.model('Media', {
-    'title': fields.String(required=True, description="Media title"),
-    'artist': fields.String(required=True, description="Artist name"),
-    'location': fields.String(required=True, description="Storage location"),
-    'format': fields.String(required=True, enum=VALID_FORMATS, description="Media format"),
-})
-
-error_model = api.model('Error', {
-    'error': fields.String,
-    'code': fields.Integer,
-})
-
-post_model = api.model('Post', {
-    'id': fields.Integer,
-})
-
-delete_model = api.model('Delete', {
-    'message': fields.String,
-})
-
 @app.route('/custom-docs')
 def custom_ui() -> str:
     """Serve the custom Swagger UI documentation page.
@@ -139,8 +176,8 @@ class MediaList(Resource):
         description="List all of Don's media.",
         responses={
             200: ("Don's kids college funds in vinyl.", [media_model]),
-            400: ('Bad Request.', error_model),
-            500: ('Internal server error.', error_model),
+            400: ('Bad Request.', error_request_model),
+            500: ('Internal server error.', error_internal_model),
         },
     )
     def get(self) -> tuple[list[dict], int] | tuple[dict, int]:
@@ -187,8 +224,8 @@ class MediaList(Resource):
         description="Add a new media to the archive.",
         responses={
             201: ('Media successfully added', post_model),
-            400: ('Missing or invalid input fields', error_model),
-            500: ('Internal server error', error_model),
+            400: ('Missing or invalid input fields', error_request_model),
+            500: ('Internal server error', error_internal_model),
         },
     )
     @ns.expect(media_model)
@@ -234,8 +271,6 @@ class MediaList(Resource):
             new_id: int = cursor.lastrowid
             conn.close()
 
-
-
         except (KeyError, TypeError) as e:
             print(str(e))  # Should be logged to a centralized logger
             return {
@@ -280,9 +315,9 @@ class MediaResource(Resource):
     @ns.doc(
         description="Delete an media by its ID.",
         responses={
-            200: ("Media {media_id} deleted successfully", delete_model),
-            404: ("Media not found.", error_model),
-            500: ("Internal server error.", error_model),
+            200: ("Deleted successfully", delete_model),
+            404: ("Media not found.", error_404_model),
+            500: ("Internal server error.", error_internal_model),
         },
     )
     def delete(self, media_id: int) -> tuple[dict, int]:
@@ -317,6 +352,7 @@ class MediaResource(Resource):
         else:
             return {"message": f"Media {media_id} deleted successfully"}, 200
 
+
 @ns.route('/search')
 class MediaSearch(Resource):
     """Resource for searching Don's music archive.
@@ -334,8 +370,8 @@ class MediaSearch(Resource):
         params={'query': 'Search term for title, artist, location, or format'},
         responses={
             200: ('Medias matching the search term', [media_model]),
-            400: ('Missing or invalid query parameter', error_model),
-            500: ('Internal server error', error_model),
+            400: ('Missing or invalid query parameter', error_request_model),
+            500: ('Internal server error', error_internal_model),
         },
     )
     def get(self) -> tuple[list[dict], int] | tuple[dict, int]:
