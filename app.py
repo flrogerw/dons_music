@@ -1,7 +1,7 @@
 """Don's Media Archive API.
 
 This module defines the core REST API for managing a personal archive of physical music media
-(CDs, Vinyl, etc.) for a user named Don. The API enables storage, retrieval, and search of
+(CDs, Vinyl, Tape) for a user named Don. The API enables storage, retrieval, and search of
 media metadata using a lightweight SQLite database and is exposed through documented HTTP endpoints.
 
 Modules Used:
@@ -57,7 +57,7 @@ api = Api(app, title="Don's Media Archive API", version='1.1',
 ns = api.namespace('media', description='Media End Points')
 
 DATABASE = 'data/media.db'
-VALID_FORMATS = ['CD', 'Vinyl']
+VALID_FORMATS = ['CD', 'Vinyl', 'Tape']
 
 # Define the main Media model for creating/updating media records
 media_model = api.model('Media', {
@@ -259,7 +259,7 @@ class MediaList(Resource):
             - title: The media title (string)
             - artist: The artist name (string)
             - location: Physical location of the media (string)
-            - format: Media format (must be one of: 'CD', 'Vinyl')
+            - format: Media format (must be one of: 'CD', 'Vinyl', 'Tape')
 
         Returns:
             201: JSON response with new record ID on success.
