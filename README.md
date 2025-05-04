@@ -20,12 +20,12 @@ Don is passionate about physical media and owns thousands of media in various fo
 
 I implemented a lightweight **Python Flask API** using:
 
-| Tech Stack      | Reason for Choice                                                               |
-|----------------|---------------------------------------------------------------------------------|
-| **Python**      | Languge you guys use.                                                           |
-| **Flask**       | My Go-To server for APIs. Ideal for small-scale APIs                            |
+| Tech Stack      | Reason for Choice                                                        |
+|----------------|--------------------------------------------------------------------------|
+| **Python**      | Languge you guys use.                                                    |
+| **Flask**       | My Go-To server for APIs. Ideal for small-scale APIs                     |
 | **Flask-RESTX** | Automatically generates Swagger UI documentation and enforces validation |
-| **SQLite**      | Perfect Don's project.  Portable, light weight and small foot print.            |
+| **SQLite**      | Perfect for Don's project.  Portable, light weight and small foot print. |
 
 This approach allows Don to call REST endpoints, search his collection, and even extend it later — all without needing a UI or SQL skills.
 * Personally I would have used Node.js for this but you guys use Python, so I figured I should do it that way.
