@@ -14,6 +14,7 @@ Key Components:
     - init_db(): Initialize the SQLite database and create the `media` table if it doesn't exist.
     - MediaList: Resource providing GET and POST operations for listing and adding media.
     - MediaSearch: Resource providing GET search functionality for media based on partial matches.
+    - MediaResource: Resource for deleting a specific media by its ID.
 
 Endpoints:
     - GET /media/              → List all media
@@ -58,6 +59,7 @@ ns = api.namespace('media', description='Media End Points')
 DATABASE = 'data/media.db'
 VALID_FORMATS = ['CD', 'Vinyl']
 
+# Define the main Media model for creating/updating media records
 media_model = api.model('Media', {
     'title': fields.String(
         required=True,
@@ -82,55 +84,59 @@ media_model = api.model('Media', {
     ),
 })
 
+# Model for generic internal/server errors (HTTP 500)
 error_internal_model = api.model('Internal_Error', {
     'error': fields.String(
-        description="Operation result message",
+        description="Error message describing what went wrong",
         example="An unexpected error occurred",
     ),
     'code': fields.Integer(
-        description="Operation result message",
+        description="HTTP status code for the error",
         example=500,
     ),
 })
 
+# Model for “not found” errors (HTTP 404)
 error_404_model = api.model('Not_Found_Error', {
     'error': fields.String(
-        description="Operation result message",
+        description="Error message when resource isn’t found",
         example="Media not found",
     ),
     'code': fields.Integer(
-        description="Operation result message",
+        description="HTTP status code for the error",
         example=404,
     ),
 })
 
+# Model for bad request errors (HTTP 400)
 error_request_model = api.model('Request_Error', {
     'error': fields.String(
-        description="Operation result message",
+        description="Error message for invalid client input",
         example="Bad Request - Invalid input structure",
     ),
     'code': fields.Integer(
-        description="Operation result message",
+        description="HTTP status code for the error",
         example=400,
     ),
 })
 
+# Model for successful POST responses
 post_model = api.model('Post', {
     'id': fields.Integer(
         required=True,
-        description="Operation result message",
+        description="Unique identifier of the newly created media record",
         example=1234,
     ),
 })
 
+# Model for successful DELETE responses
 delete_model = api.model('Delete', {
     'message': fields.String(
         required=True,
-        description="Operation result message",
+        description="Confirmation message after deletion",
         example="Media {media_id} deleted successfully",
     ),
 })
-
 
 def init_db() -> None:
     """Initialize the SQLite database if it does not already exist.
@@ -322,7 +328,7 @@ class MediaList(Resource):
 @ns.route('/<int:media_id>')
 @ns.param('media_id', 'The unique ID of the media')
 class MediaResource(Resource):
-    """Resource for retrieving or deleting a specific media by its ID.
+    """Resource for deleting a specific media by its ID.
 
     Methods:
         delete(): Deletes the media with the given ID from the archive.
