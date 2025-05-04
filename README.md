@@ -226,7 +226,10 @@ don-archive/
 ├── requirements.txt      # Python dependencies
 ├── Dockerfile            # Docker image
 ├── docker-compose.yml    # Service and volume config
-└── data/                 # Persistent SQLite storage (auto-created)
+├── data/                 # Persistent SQLite storage (auto-created)
+├── static/               # Static assets such as images
+└── templates/            # Swagger UI templates
+
 ```
 
 ---
