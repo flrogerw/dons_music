@@ -59,10 +59,27 @@ DATABASE = 'data/media.db'
 VALID_FORMATS = ['CD', 'Vinyl']
 
 media_model = api.model('Media', {
-    'title': fields.String(required=True, description="Media title"),
-    'artist': fields.String(required=True, description="Artist name"),
-    'location': fields.String(required=True, description="Storage location"),
-    'format': fields.String(required=True, enum=VALID_FORMATS, description="Media format"),
+    'title': fields.String(
+        required=True,
+        description="Media title",
+        example="Dark Side of the Moon"
+    ),
+    'artist': fields.String(
+        required=True,
+        description="Artist name",
+        example="Pink Floyd"
+    ),
+    'location': fields.String(
+        required=True,
+        description="Storage location",
+        example="Shelf Rock"
+    ),
+    'format': fields.String(
+        required=True,
+        enum=VALID_FORMATS,
+        description="Media format",
+        example="Vinyl"
+    ),
 })
 
 error_internal_model = api.model('Internal_Error', {
