@@ -1,6 +1,6 @@
 # Don’s Music Archive API
 
-A simple RESTful API to help Don catalog and search his enormous collection of CDs and records — so you can finally play the right media when I visit.
+A simple RESTful API to help Don catalog and search his enormous collection of CDs, Tapes and records — so he can finally play the right media when I visit.
 
 ---
 
